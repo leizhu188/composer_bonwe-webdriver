@@ -1,0 +1,17 @@
+{
+  "name": "bonwe/webdriver",
+  "description": "基于facebook/webdriver优化的webdriver",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "weibangwei",
+      "email": "122783533@qq.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload":{
+    "psr-4":{
+      "Bonwe\\WebDriver\\":"lib/"
+    }
+  }
+}
