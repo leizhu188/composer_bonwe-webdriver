@@ -275,6 +275,10 @@ class HttpCommandExecutor implements WebDriverCommandExecutor
             $encoded_params = json_encode($params);
         }
 
+        if ($http_method === 'POST' && empty($params) && is_array($params)) {
+            $encoded_params = "{}";
+        }
+
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $encoded_params);
 
         $raw_results = trim(curl_exec($this->curl));

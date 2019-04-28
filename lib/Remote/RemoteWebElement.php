@@ -325,7 +325,16 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
      * @param mixed $value The data to be typed.
      * @return RemoteWebElement The current instance.
      */
-    public function sendKeys($value)
+    public function sendKeys($value,$browser = 'safari')
+    {
+        if ($browser == 'firefox'){
+            return self::sendFirefoxKeys($value);
+        }
+
+        return self::sendBrowserKeys($value);
+    }
+
+    private function sendBrowserKeys($value)
     {
         $local_file = $this->fileDetector->getLocalFile($value);
         if ($local_file === null) {
@@ -338,6 +347,27 @@ class RemoteWebElement implements WebDriverElement, WebDriverLocatable
             $remote_path = $this->upload($local_file);
             $params = [
                 'value' => WebDriverKeys::encode($remote_path),
+                ':id' => $this->id,
+            ];
+            $this->executor->execute(DriverCommand::SEND_KEYS_TO_ELEMENT, $params);
+        }
+
+        return $this;
+    }
+
+    private function sendFirefoxKeys($value)
+    {
+        $local_file = $this->fileDetector->getLocalFile($value);
+        if ($local_file === null) {
+            $params = [
+                'text' => $value,
+                ':id' => $this->id,
+            ];
+            $this->executor->execute(DriverCommand::SEND_KEYS_TO_ELEMENT, $params);
+        } else {
+            $remote_path = $this->upload($local_file);
+            $params = [
+                'text' => $remote_path,
                 ':id' => $this->id,
             ];
             $this->executor->execute(DriverCommand::SEND_KEYS_TO_ELEMENT, $params);
